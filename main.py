@@ -10,22 +10,24 @@ class Example(QMainWindow):
         super().__init__()
         uic.loadUi('UI.ui', self)
         self.flag = False
+        self.pushButton.clicked.connect(self.go_paint)
+
+    def go_paint(self):
+        self.qp = QPainter()
+        self.flag = True
+        self.update()
 
     def paintEvent(self, event):
         if self.flag:
-            qp = QPainter()
-            qp.begin(self)
-            self.draw_flag(qp)
-            qp.end()
-            self.flag = False
+            self.qp.begin(self)
+            self.draw_flag(self.qp)
+            self.qp.end()
 
     def draw_flag(self, qp):
-        self.flag = True
-        qp.setBrush(QColor(255, 255, 0))
+        self.qp.setBrush(QColor(255, 255, 0))
         x, y = randint(0, 549), randint(0, 549)
         d = randint(10, 30)
-        qp.drawEllipse(x, y, d, d)
-        self.update()
+        self.qp.drawEllipse(x, y, d, d)
 
 
 if __name__ == '__main__':
